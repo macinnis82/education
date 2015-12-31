@@ -11,6 +11,7 @@ import requests
 import pandas as pd
 import numpy as np
 import sqlite3 as lite
+import matplotlib.pyplot as plt
 
 url = "http://web.archive.org/web/20110514112442/http://unstats.un.org/unsd/demographic/products/socind/education.htm"
 
@@ -44,3 +45,25 @@ con = lite.connect('education.db')
 cur = con.cursor()
 
 df.to_sql(con=con, name='school_life', if_exists='replace', flavor='sqlite')
+
+# profile the data
+
+print "The Mean, Median and Variance for Men:"
+print "Mean: {}".format(df['Men'].mean())
+print "Median: {}".format(df['Men'].median())
+print "Variance: {}".format(df['Men'].var())
+
+print "The Mean, Median and Variance for Women:"
+print "Mean: {}".format(df['Women'].mean())
+print "Median: {}".format(df['Women'].median())
+print "Variance: {}".format(df['Women'].var())
+
+plt.figure()
+df[['Men','Women']].hist()
+plt.draw()
+plt.savefig('histograms.png')
+
+plt.figure()
+df[['Men','Women']].boxplot()
+plt.draw()
+plt.savefig('boxplots.png')
